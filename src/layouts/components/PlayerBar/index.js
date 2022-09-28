@@ -52,6 +52,7 @@ function PlayerBar({ playSong, musicRef }) {
                 dispatch(playMusic(listSong[0]));
             }
         }
+        dispatch(addValueIsPlay(true));
     };
 
     const handlePrevSong = () => {
