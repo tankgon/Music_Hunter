@@ -6,24 +6,28 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '~/redux/actions';
 import zingStorage from '~/utils/storage';
 import styles from './Icon.module.scss';
-
 const cx = classNames.bind(styles)
 
 function HeartIcon({activeNoColor, library = 'librarySong', data = {encodeId: null} }) {
     const dispatch = useDispatch()
     const librarySong = useSelector(state => state.songReducer.librarySong)
     const libraryPlaylist = useSelector(state => state.playlistReducer.libraryPlaylist)
+    const currentSong = useSelector(state => state.playMusicReducer.song)
+    const [isActive, setIsActive] = useState(false)
 
-    const checkSong = () => {
-        if(library === 'librarySong') {
-            return librarySong.findIndex(song => song.encodeId === data.encodeId) !== -1;
+
+    useEffect(() => {
+        const checkSong = () => {
+            if(library === 'librarySong') {
+                return librarySong.findIndex(song => song.encodeId === data.encodeId) !== -1;
+            }
+            else if(library === 'libraryPlaylist') {
+                return libraryPlaylist.findIndex(playlist => playlist.encodeId === data.encodeId) !== -1;
+            }
         }
-        else if(library === 'libraryPlaylist') {
-            return libraryPlaylist.findIndex(playlist => playlist.encodeId === data.encodeId) !== -1;
-        }
-    }
+        setIsActive(checkSong())
+    }, [librarySong, libraryPlaylist, currentSong])
     
-    const [isActive, setIsActive] = useState(checkSong)
 
     let title = isActive ? 'Xóa khỏi thư viện' : 'Thêm vào thư viện'
 

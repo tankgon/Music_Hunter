@@ -46,22 +46,23 @@ function SidebarRight({playlistActive}) {
         }
     }
     const renderSong = () => {
-        return( data.map((item, index) => {
+        return( data.map((song, index) => {
             return(  
-                <Draggable key={item.idSong} draggableId={item.idSong.toString()} index={index} type="TASK">
+                <Draggable key={song.idSong} draggableId={song.idSong.toString()} index={index} type="TASK">
                     {(provided)=>(
                         <div 
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps} 
                         className={cx('song-playing')}>
-                            <Media 
+                            {/* Em cmt tam thoi */}
+                            {/* <Media 
+                                image={song.thumbnail || song.thumbnailM}
+                                noHover
+                                song={song ? song : null}
                                 largeContent
-                                image={item.img}
-                                songName={item.song}
-                                singerName={item.name}
                                 mediaActive
-                            />
+                            /> */}
                         </div>
                     )}
                 </Draggable> 
@@ -79,19 +80,20 @@ function SidebarRight({playlistActive}) {
                     {(provided)=>(
                         <div className={cx('playlist-wrapper', 'playlist', {active: activePlaylist})}
                         {...provided.droppableProps} ref={provided.innerRef}>
-                            { data.map((item, index) => {
+                            { data.map((song, index) => {
                                 return(  
-                                    <Draggable key={item.idSong} draggableId={item.idSong.toString()} index={index}>
+                                    <Draggable key={song.idSong} draggableId={song.idSong.toString()} index={index}>
                                         {(provided)=>(
                                             <div {...provided.draggableProps} {...provided.dragHandleProps} 
                                             ref={provided.innerRef} className={cx('song-playing')}>
-                                                <Media 
+                                                {/* Em cmt tam thoi */}
+                                                {/* <Media 
+                                                    image={song.thumbnail || song.thumbnailM}
+                                                    noHover
+                                                    song={song ? song : null}
                                                     largeContent
-                                                    image={item.img}
-                                                    songName={item.song}
-                                                    singerName={item.name}
                                                     mediaActive
-                                                />
+                                                /> */}
                                             </div>
                                         )}
                                     </Draggable> 

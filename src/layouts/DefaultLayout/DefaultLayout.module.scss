@@ -1,6 +1,10 @@
 .container {
+    display: flex;
     height: calc(100vh - var(--music-ctrl-height));
     background-color: var(--bg-main-color);
+    &.container-full {
+        height: 100vh;
+    }
 }
 
 .main-container {

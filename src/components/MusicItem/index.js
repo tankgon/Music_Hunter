@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from '../Icon';
 import HeartIcon from '../Icon/Heart';
@@ -6,70 +7,52 @@ import PlaySongIcon from '../Icon/Play/PlaySongIcon';
 import { playMusic } from '~/redux/actions';
 import Image from '../Image';
 import styles from './MusicItem.module.scss';
+import { addHistorySong } from '../../redux/actions';
 const cx = classNames.bind(styles);
 
 function MusicItemUser({ className, song, number, ranking }) {
     const formatTime = (time) => {
-        if (time < 10) {
-            return `0${time}`;
+        if(time < 10) {
+            return `0${time}`
         } else {
-            return time;
+            return time
         }
-    };
-    const minuteTime = formatTime(Math.floor(song.duration / 60));
-    const secondTime = formatTime(song.duration - minuteTime * 60);
-
-    const librarySong = useSelector((state) => state.songReducer.librarySong);
-
+    }
+    const minuteTime = formatTime(Math.floor(song.duration / 60))
+    const secondTime = formatTime(song.duration - (minuteTime * 60))
+    const [checkSong, setCheckSong] = useState(false)
+    const librarySong = useSelector(state => state.songReducer.librarySong)
+    const currentSong = useSelector(state => state.playMusicReducer.song);
     const dispatch = useDispatch();
 
-    const renderHeart = () => {
-        const isInLibrary = librarySong.map((mySong) => {
-            if (mySong.encodeId === song.encodeId || !undefined)
-                return mySong.encodeId;
-        });
-        if (isInLibrary) {
-            return (
-                <div className={cx('item')}>
-                    <HeartIcon data={song} />
-                </div>
-            );
-        }
-    };
+    useEffect(() => {
+        const isInLibrary = librarySong.findIndex(mySong => mySong.encodeId === song.encodeId) !== -1;
+        setCheckSong(isInLibrary)
+    }, [librarySong])
 
-    function RankingStatus({ rank }) {
+    
+
+    function RankingStatus({rank}) {
         if (rank < 0) {
             return (
                 <div className={cx('rank-status')}>
-                    <i
-                        className={cx(
-                            'status-icon',
-                            'icon-down',
-                            'fas fa-caret-down'
-                        )}
-                    ></i>
+                    <i className={cx('status-icon', 'icon-down', "fas fa-caret-down")}></i>
                     <span className={cx('status-num')}>{Math.abs(rank)}</span>
                 </div>
-            );
+            )
         } else if (rank > 0) {
             return (
                 <div className={cx('rank-status')}>
-                    <i
-                        className={cx(
-                            'status-icon',
-                            'icon-up',
-                            'fas fa-caret-up'
-                        )}
-                    ></i>
+                    <i className={cx('status-icon', 'icon-up', "fas fa-caret-up")}></i>
                     <span className={cx('status-num')}>{rank}</span>
                 </div>
-            );
+            )
         } else {
             return (
                 <div className={cx('rank-status')}>
                     <span className={cx('line')}></span>
                 </div>
-            );
+            )
         }
     }
 
@@ -78,7 +61,10 @@ function MusicItemUser({ className, song, number, ranking }) {
     };
 
     return (
-        <div className={cx('wrapper', { [className]: className })}>
+        <div className={cx('wrapper', {
+                [className]: className,
+                isActive: song.encodeId === currentSong?.encodeId     
+            })}>
             <div className={cx('media')}>
                 <div className={cx('media-left')}>
                     {ranking ? (
@@ -158,10 +144,10 @@ function MusicItemUser({ className, song, number, ranking }) {
                     </div>
                     <div className={cx('items')}>
                         <div className='flex items-center content-between'>
-                            {renderHeart()}
-                            <div className={cx('item', 'duration')}>
-                                {minuteTime}:{secondTime}
-                            </div>
+                            {checkSong ? (
+                                <div className={cx('item')}><HeartIcon data={song} /></div>
+                            ) : ('')}
+                            <div className={cx('item', 'duration')}>{minuteTime}:{secondTime}</div>
                         </div>
                     </div>
                 </div>

@@ -2,26 +2,28 @@ import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
 import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import styles from './MusicControl.module.scss';
 import Media from '~/components/Media';
 import PlayerBar from '~/layouts/components/PlayerBar';
 import Icon from '~/components/Icon';
 import SidebarRight from '../SidebarRight';
-import { useSelector, useDispatch } from 'react-redux';
 import zingStorage from '~/utils/storage';
 import * as actions from '~/redux/actions';
 import axios from 'axios';
 const cx = classNames.bind(styles);
 
 function MusicControl() {
-    const initValue = zingStorage.getAddValueVolume();
+    const initValue = zingStorage.getAddValueVolume() || 50;
     const dispatch = useDispatch();
     const [toggleBtn, setToggleBtn] = useState(false);
     const [activePlaylist, setActivePlaylist] = useState(false);
-    const [valueInput, setvalueInput] = useState(initValue);
+    const [valueInput, setvalueInput] = useState(initValue || 50);
     const [playSong, setPlaySong] = useState('');
 
     const musicRef = useRef();
+    const song = useSelector((state) => state.playMusicReducer.song);
 
     const onChangeValue = (e) => {
         setvalueInput(parseInt(e.target.value));
@@ -41,22 +43,17 @@ function MusicControl() {
         activePlaylist ? setActivePlaylist(false) : setActivePlaylist(true);
     }
 
-    // const handleMute = () => {
-    //     if (volume === 0) {
-    //         dispatch(setVolume(20));
-    //         audioRef.current.volume = 0.2;
-    //         radioRef.current.volume = 0.2;
-    //     } else {
-    //         dispatch(setVolume(0));
-    //         audioRef.current.volume = 0;
-    //         radioRef.current.volume = 0;
-    //     }
-    // };
-
-    //Get list song of page
-    const listSong = useSelector((state) => state.musicsOfPageReducer);
-
-    const song = useSelector((state) => state.playMusicReducer);
+    const handleMute = () => {
+        if (zingStorage.getAddValueVolume() === 0) {
+            dispatch(actions.addValueVolume(20));
+            zingStorage.setAddValueVolume(20);
+            setvalueInput(20)
+        } else {
+            dispatch(actions.addValueVolume(0));
+            zingStorage.setAddValueVolume(0);
+            setvalueInput(0)
+        }
+    };
 
     useEffect(() => {
         axios
@@ -73,20 +70,21 @@ function MusicControl() {
             <div
                 className={cx(
                     'control-left',
-                    'flex items-center justify-start'
+                    'flex items-center justify-start',
+                    'active'
                 )}
             >
-                <Media
-                    image={
-                        song.thumbnail ||
-                        song.thumbnailM ||
-                        'https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp…over/9/7/5/7/9757a70a3932be1bfbba5695e120a4c1.jpg'
-                    }
-                    songName={song.title || 'Nguời âm phủ'}
-                    singerName={song.artistsNames || 'OSAD'}
-                    largeCd
-                    noHover
-                />
+                {song ? 
+                    <Media
+                        image={song.thumbnail || song.thumbnailM ||
+                            'https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp…over/9/7/5/7/9757a70a3932be1bfbba5695e120a4c1.jpg'}
+                        largeCd
+                        noHover
+                        song={song}
+                        songName={song.title || 'Nguời âm phủ'}
+                        singerName={song.artistsNames || 'OSAD'}
+                    />
+                :null}
             </div>
             <PlayerBar playSong={playSong} musicRef={musicRef} />
             <div
@@ -119,7 +117,7 @@ function MusicControl() {
                         activeNoColor
                         icon={<i className='fal fa-volume'></i>}
                         activeIcon={<i className='fal fa-volume-mute'></i>}
-                        // onClick= {handleMute}
+                        onClick= {handleMute}
                     />
                     <input
                         id='volume'

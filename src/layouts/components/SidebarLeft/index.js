@@ -94,7 +94,7 @@ function SidebarLeft() {
                     <MenuItem 
                         noActive
                         title="Gần Đây"
-                        to={`/history/${thanhHistory[1] === undefined || thanhHistory === ''? 'song' : thanhHistory[1]}`}
+                        to={`/history/${thanhHistory[1] === undefined || thanhHistory[1] === '' ? 'song' : thanhHistory[1]}`}
                         icon={<i className="fal fa-history"></i>}
                     />
                 </Menu>

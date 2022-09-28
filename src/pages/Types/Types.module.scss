@@ -1,0 +1,20 @@
+.wrapper {
+    width: 100%;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+
+    h1 {
+        font-size: 60px;
+        font-weight: 700;
+        margin-top: 300px;
+        color: #8132b6;
+        text-shadow: -15px 5px 20px #904cbd;
+        transition: all 0.5s ease-in-out;
+        user-select: none;
+        cursor: pointer;
+        &:hover {
+            text-shadow: -16px 5px 15px #00d8ff;
+        }
+    }
+}

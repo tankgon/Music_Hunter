@@ -178,6 +178,7 @@ function Home() {
                                             <img
                                                 className={cx('card-img')}
                                                 src={artist.thumbnail}
+                                                alt=''
                                             />
                                             <div className={cx('card-content')}>
                                                 <h4
@@ -193,6 +194,9 @@ function Home() {
                                                             if (index < 3) {
                                                                 return (
                                                                     <div
+                                                                        key={
+                                                                            index
+                                                                        }
                                                                         className={cx(
                                                                             'thumb'
                                                                         )}
@@ -204,6 +208,7 @@ function Home() {
                                                                             src={
                                                                                 thumb.thumbnail
                                                                             }
+                                                                            alt=''
                                                                         />
                                                                     </div>
                                                                 );
@@ -246,9 +251,10 @@ function Home() {
             <div className={cx('section')}>
                 <div className={cx('list-playlist')}>
                     {weekChart &&
-                        weekChart.map((item) => {
+                        weekChart.map((item, index) => {
                             return (
                                 <div
+                                    key={index}
                                     className={cx(
                                         'card-wrapper',
                                         'w-[33.33%] px-3.5 mb-7'

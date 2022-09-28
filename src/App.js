@@ -60,7 +60,6 @@ function App() {
                             <Route path="/history/podcast" element={<HistoryPodCast/>} />
                         </Route>
 
-
                         <Route path='/zing-chart' element={<Zingchart />} />
 
                         <Route path='/zing-chart-tuan' element={<LayoutRankTop />} >

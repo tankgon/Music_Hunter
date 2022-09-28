@@ -1,7 +1,6 @@
 import styles from '../User.module.scss';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import zingStorage from '~/utils/storage';
 import MusicItem from '~/components/MusicItem';
 import { useDispatch } from 'react-redux';

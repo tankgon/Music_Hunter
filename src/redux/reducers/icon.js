@@ -3,7 +3,7 @@ import zingStorage from '~/utils/storage';
 
 const initialState = {
     valueVolume: zingStorage.getAddValueVolume,
-    isPlay: '',
+    isPlay: true,
     isLoop: '',
     isRanDom: '',
 };
@@ -22,7 +22,7 @@ const IconProject = (state = initialState, actions) => {
             isPlay.push(actions.payload);
             return {
                 ...state,
-                isPlay: isPlay,
+                isPlay: isPlay ,
             };
         case types.SET_ACTIVE_GET_IS_RANDOM:
             let isRanDom = [state.isRanDom];
