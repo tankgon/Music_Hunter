@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import styles from './PlaySongIcon.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { addValueIsPlay, addHistorySong } from '../../../redux/actions';
-import zingStorage from '~/utils/storage';
 const cx = classNames.bind(styles)
 
 function PlaySongIcon({className, data = {encodeId: null}}) {
@@ -12,19 +11,8 @@ function PlaySongIcon({className, data = {encodeId: null}}) {
     const song = useSelector((state) => state.playMusicReducer.song);
     const classIcon = ['fas fa-play', 'fas fa-waveform']
 
-
-    if(song?.encodeId){
-        if(zingStorage.getHistorySong()){
-            if(zingStorage.getHistorySong().findIndex(playlist => playlist?.encodeId === song?.encodeId ) === -1) {
-                dispatch(addHistorySong(song))
-            }  
-        }
-        else dispatch(addHistorySong(song))
-    }
-
     const handleClick = () => {
         dispatch(addValueIsPlay(true));
-
     };
     return (
         <>

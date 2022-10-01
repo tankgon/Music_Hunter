@@ -21,6 +21,7 @@ function Menu({ children, items=[],  }) {
                     leftIcon={item.leftIcon}
                     rightIcon={item.rightIcon}
                     href={item.href}
+                    onclick = {item.onclick}
                 />
             )
             

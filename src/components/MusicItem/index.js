@@ -8,6 +8,7 @@ import { playMusic } from '~/redux/actions';
 import Image from '../Image';
 import styles from './MusicItem.module.scss';
 import { addHistorySong } from '../../redux/actions';
+import zingStorage from '~/utils/storage';
 const cx = classNames.bind(styles);
 
 function MusicItemUser({ className, song, number, ranking }) {
@@ -58,7 +59,21 @@ function MusicItemUser({ className, song, number, ranking }) {
 
     const handlePlayMusic = (song) => {
         dispatch(playMusic(song));
+        if(song?.encodeId){
+            if(zingStorage.getHistorySong()){
+                console.log(song);
+                if(zingStorage.getHistorySong().findIndex(playlist => playlist?.encodeId === song?.encodeId ) === -1) {
+                    dispatch(addHistorySong(song))
+                }
+            }
+            else{
+                if(zingStorage.getHistorySong() == null) {
+                    dispatch(addHistorySong(song))
+                } 
+            } 
+        }
     };
+
 
     return (
         <div className={cx('wrapper', {

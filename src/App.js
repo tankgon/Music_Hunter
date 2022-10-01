@@ -33,10 +33,11 @@ import HistoryPlayList from './pages/User/History/HistoryPlayList';
 import HistoryMv from './pages/User/History/HistoryMv';
 import HistoryRadio from './pages/User/History/HistoryRadio';
 import HistoryPodCast from './pages/User/History/HistoryPodCast';
-
-
+import Login from './pages/Login';
 
 function App() {
+
+
     return (
         <Router>
             <div className='App'>
@@ -81,9 +82,8 @@ function App() {
                         <Route path='/nhac-moi' element={<Nhacmoi />} />
                         <Route path='/types' element={<Types />} />
                     </Route>
-
                     <Route path='/video-clip/:id' element={<Film/>} />
-
+                    <Route path='/login' element={<Login/>} />
                 </Routes>
             </div>
         </Router>
