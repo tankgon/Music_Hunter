@@ -8,6 +8,7 @@ function MenuItem({
     href,
     leftIcon,
     rightIcon,
+    onclick,
     ...props
 }) {
     let Comp = 'div';
@@ -21,7 +22,7 @@ function MenuItem({
     const classes = cx('menu-item');
 
     return (
-        <Comp className={classes} {...props}>
+        <Comp onClick={onclick} className={classes} {...props} >
             {leftIcon && <span className={cx('icon-left')}>{leftIcon}</span>}
             <span className={cx('title')}>{data.title}</span>
             {rightIcon && <span className={cx('icon-right')}>{rightIcon}</span>}

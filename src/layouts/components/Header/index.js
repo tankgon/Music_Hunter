@@ -8,10 +8,14 @@ import styles from './Header.module.scss';
 import images from '~/images';
 import Menu from '~/components/Popper/Menu/Menu';
 import ThemeList from './ThemeList/index';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../../firebase/config';
+import { onAuthStateChanged } from '@firebase/auth';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const navigate = useNavigate();
     const [color, setColor] = useState(false);
 
     const changeBackground = () => {
@@ -36,6 +40,10 @@ function Header() {
         setCheckToppic(false)
     }
 
+    const a =() =>{
+        alert('thasnh')
+    }
+
 
     const userMenu = [
         {
@@ -49,6 +57,7 @@ function Header() {
         {
             title: 'Đăng xuất',
             leftIcon: <i className='fal fa-sign-out'></i>,
+            onClick: {a}
         },
     ];
 
@@ -91,8 +100,19 @@ function Header() {
         },
     ];
 
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                navigate('/login');
+            }
+        })
+    }, [navigate]);
+
     return (
-        <div className={color ? cx('wrapper') : cx('wrapper2')}>
+        
+        <div className={color ? cx('wrapper') : cx('wrapper2')}> 
+        
             <div className={cx('inner')}>
                 <div className={cx('left')}>
                     <button className={cx('direct-btn')}>
@@ -355,8 +375,14 @@ function Header() {
                         </div>
                     </Menu>
 
-                    <Menu items={userMenu}>
+                    <Menu items={userMenu} >
                         <img
+                            // onClick={(set) => (alert('thanh'),{
+                            //     user: null,
+                            //     setUser: (user) => set({ user: user }),
+                            //     modalName: '',
+                            //     setModalName: (modalName) => set({ modalName: modalName }), 
+                            // })} 
                             alt='avatar'
                             className={cx('user-avatar')}
                             src={images.defaultAvata}
