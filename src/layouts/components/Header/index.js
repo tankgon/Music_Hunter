@@ -101,13 +101,13 @@ function Header() {
     ];
 
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                navigate('/login');
-            }
-        })
-    }, [navigate]);
+    // useEffect(() => {
+    //     onAuthStateChanged(auth, (user) => {
+    //         if (!user) {
+    //             navigate('/login');
+    //         }
+    //     })
+    // }, [navigate]);
 
     return (
         
