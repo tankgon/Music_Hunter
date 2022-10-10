@@ -9,68 +9,101 @@ const cx = classNames.bind(styles);
 
 function PlayerBar({ playSong, musicRef }) {
     const dispatch = useDispatch();
-    useSelector((state) => state.IconProject.isRanDom['1'])
-    const song = useSelector((state) => state.playMusicReducer.song);
+    const isRandom = useSelector((state) => state.IconProject.isRandom)
+    const isPlay = useSelector((state) => state.IconProject.isPlay)
+    const isLoop = useSelector((state) => state.IconProject.isLoop)
+    
+    const currentSong = useSelector((state) => state.playMusicReducer.song);
     const valueVolume = useSelector((state) => state.IconProject.valueVolume['1']/100)
-    const isPlay = useSelector((state) => state.IconProject.isPlay['1'])
-    const isLoop = useSelector((state) => state.IconProject.isLoop['1'])
     const listSong = useSelector((state) => state.musicsOfPageReducer);
-
-    const [PlaySong, setplaySong] = useState(0);
+    const [currentTimePercent, setCurrentTimePercent] = useState(0);
     const [LoadingNumber, setloadingNumber] = useState();
-    const [ChecklistSongRamDom, setcheckListSongRamDom] = useState(0);
+    
+    const currentIndex = listSong.findIndex(playlist => playlist?.encodeId === currentSong?.encodeId)
 
-    if (PlaySong) {
+    if (currentTimePercent) {
         if (isPlay) musicRef.current.play();
         else musicRef.current.pause();
     }
 
-    useEffect(() => {
-        setcheckListSongRamDom(listSong[Math.floor(Math.random() * listSong.length) - 1])
-    }, [isPlay]);
-
-    //kết thúc audio sẽ làm gì ...
-    const handleOnEnd = () => {
-        if (!zingStorage.getIsLoop()) {
+    const togglePlay = () => {
+        if(isPlay) {
             dispatch(addValueIsPlay(false));
-            handleNextSong()
+            musicRef.current.pause();
+        } else {
+            dispatch(addValueIsPlay(true));
+            musicRef.current.play();
         }
     }
 
-    const indexSong = listSong.findIndex(playlist => playlist?.encodeId === song?.encodeId)
+    const toggleRandom = () => {
+        if (isRandom) {
+            dispatch(setRandom(false));
+        } else {
+            dispatch(setRandom(true));
+        }
+    };
+
+    const toggleLoop = () => {
+        if (isLoop) {
+            dispatch(setLoop(false));
+        } else {
+            dispatch(setLoop(true));
+        }
+    };
+
+    const playRandomSong = () => {
+        const randomIndex = Math.floor(Math.random() * (listSong.length))
+        dispatch(playMusic(listSong[randomIndex]));
+    }
+
+    const nextSong = () => {
+        if(currentIndex < listSong.length - 1) {
+            dispatch(playMusic(listSong[currentIndex + 1]));
+        } else {
+            dispatch(playMusic(listSong[0]));
+        }
+    }
+
+    const prevSong = () => {
+        if(currentIndex === 0) {
+            dispatch(playMusic(listSong[listSong.length - 1]));
+        } else {
+            dispatch(playMusic(listSong[currentIndex - 1]));
+        }
+    }
 
     const handleNextSong = () => {
-        dispatch(addValueIsPlay(false));
-        if(zingStorage.getIsRanDom()){
-            const randomIndex = Math.floor(Math.random() * (listSong.length))
-            setcheckListSongRamDom(listSong[randomIndex])
-            dispatch(playMusic(ChecklistSongRamDom));
+        if(isRandom){
+            playRandomSong()
         } else {
-            if(indexSong < listSong.length - 1) {
-                dispatch(playMusic(listSong[indexSong + 1]));
-            } else {
-                dispatch(playMusic(listSong[0]));
-            }
+            nextSong()
         }
-        dispatch(addValueIsPlay(true));
+        dispatch(addValueIsPlay(true))
     };
 
     const handlePrevSong = () => {
-        dispatch(addValueIsPlay(false));
-        if(indexSong === 0) {
-            dispatch(playMusic(listSong[listSong.length - 1]));
+        if(isRandom){
+            playRandomSong()
         } else {
-            dispatch(playMusic(listSong[indexSong - 1]));
+            prevSong()
         }
         dispatch(addValueIsPlay(true))
     }
 
-    const onPlaying = () => {
+    //kết thúc audio sẽ làm gì ...
+    const handleOnEnd = () => {
+        if (!isLoop) {
+            handleNextSong()
+        }
+    }
+
+
+    const onTimeUpdate = () => {
         const duration = musicRef.current.duration;
         const ct = musicRef.current.currentTime;
-        setplaySong((ct / duration) * 100);
+        setCurrentTimePercent((ct / duration) * 100);
         setloadingNumber(parseInt(ct));
-        musicRef.current.volume = valueVolume;
     };
 
     const onChangeValue = (e) => {
@@ -79,51 +112,17 @@ function PlayerBar({ playSong, musicRef }) {
         }
     };
 
-    const handleLoop = () => {
-        if (zingStorage.getIsLoop()) {
-            dispatch(setLoop(false));
-            zingStorage.setIsLoop(false);
-        } else {
-            dispatch(setLoop(true));
-            zingStorage.setIsLoop(true);
-        }
-    };
-
-    useEffect(() => {
-        zingStorage.getIsRanDom();
-    }, []);
-
-    const handleRandom = () => {
-        if (zingStorage.getIsRanDom()) {
-            dispatch(setRandom(false));
-            zingStorage.setIsRanDom(false);
-        } else {
-            dispatch(setRandom(true));
-            zingStorage.setIsRanDom(true);
-        }
-    };
-
     return (
         <div className={cx('wrapper', 'grow')}>
             <div className={cx('control-btns', 'flex justify-center grow')}>
-                {zingStorage.getIsRanDom() ? (
-                    <Icon
-                        s18
-                        isActive
-                        className={cx('icon')}
-                        icon={<i className='fal fa-random'></i>}
-                        activeIcon={<i className='fal fa-random'></i>}
-                        onClick={handleRandom}
-                    />
-                ) : (
-                    <Icon
-                        s18
-                        className={cx('icon')}
-                        icon={<i className='fal fa-random'></i>}
-                        activeIcon={<i className='fal fa-random'></i>}
-                        onClick={handleRandom}
-                    />
-                )}
+                <Icon
+                    s18
+                    isActive={isRandom}
+                    className={cx('icon')}
+                    icon={<i className='fal fa-random'></i>}
+                    activeIcon={<i className='fal fa-random'></i>}
+                    onClick={toggleRandom}
+                />
 
                 <Icon
                     s18
@@ -132,33 +131,15 @@ function PlayerBar({ playSong, musicRef }) {
                     onClick ={handlePrevSong}
                 />
 
-                {isPlay ? (
-                    <Icon
-                        s14
-                        activeNoColor
-                        isActive
-                        className={cx('icon', 'icon-play')}
-                        icon={<i className='fas fa-play'></i>}
-                        activeIcon={<i className='fas fa-pause'></i>}
-                        onClick={() => {
-                            dispatch(addValueIsPlay(false));
-                            musicRef.current.pause();
-                        }}
-                    />
-                ) : (
-                    <Icon
-                        s14
-                        activeNoColor
-                        isActive
-                        className={cx('icon', 'icon-play')}
-                        icon={<i className='fas fa-play'></i>}
-                        activeIcon={<i className='fas fa-play'></i>}
-                        onClick={() => {
-                            dispatch(addValueIsPlay(true));
-                            musicRef.current.play();
-                        }}
-                    />
-                )}
+                <Icon
+                    s14
+                    activeNoColor
+                    isActive={isPlay}
+                    className={cx('icon', 'icon-play')}
+                    icon={<i className='fas fa-play'></i>}
+                    activeIcon={<i className='fas fa-pause'></i>}
+                    onClick={() => togglePlay()}
+                />
 
                 <Icon
                     s18
@@ -167,24 +148,14 @@ function PlayerBar({ playSong, musicRef }) {
                     onClick ={handleNextSong}
                 />
 
-                {zingStorage.getIsLoop() ? (
-                    <Icon
-                        s18
-                        isActive
-                        className={cx('icon')}
-                        icon={<i className='fal fa-repeat'></i>}
-                        activeIcon={<i className='fal fa-repeat'></i>}
-                        onClick={handleLoop}
-                    />
-                ) : (
-                    <Icon
-                        s18
-                        className={cx('icon')}
-                        icon={<i className='fal fa-repeat'></i>}
-                        activeIcon={<i className='fal fa-repeat'></i>}
-                        onClick={handleLoop}
-                    />
-                )}
+                <Icon
+                    s18
+                    isActive={isLoop}
+                    className={cx('icon')}
+                    icon={<i className='fal fa-repeat'></i>}
+                    activeIcon={<i className='fal fa-repeat'></i>}
+                    onClick={toggleLoop}
+                />
             </div>
             <div
                 className={cx(
@@ -213,7 +184,7 @@ function PlayerBar({ playSong, musicRef }) {
                         autoPlay={isPlay}
                         ref={musicRef}
                         loop={isLoop}
-                        onTimeUpdate={onPlaying}
+                        onTimeUpdate={onTimeUpdate}
                         onEnded={handleOnEnd}
                     />
                 )}
@@ -222,28 +193,30 @@ function PlayerBar({ playSong, musicRef }) {
                     id='progress'
                     className={cx('progress')}
                     style={{
-                        background: `linear-gradient(to right, #ffffff 0%, #ffffff ${PlaySong}%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 100%)`,
+                        background: `linear-gradient(to right, #ffffff 0%, #ffffff ${currentTimePercent}%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 100%)`,
                     }}
                     type='range'
-                    value={PlaySong}
+                    value={currentTimePercent}
                     min='0'
                     max='100'
                     onChange={onChangeValue}
                 ></input>
 
-                {!song.duration ? (
+                {/* {!currentSong.duration ? (
                     <div className={cx('total-time')}>00:00</div>
-                ) : (
+                ) : ( */}
                     <div className={cx('total-time')}>
-                        {Math.floor(`${song.duration}` / 60) < 10
-                            ? '0' + Math.floor(`${song.duration}` / 60)
-                            : Math.floor(`${song.duration}` / 60)}
-                        :
-                        {`${song.duration}` % 60 < 10
-                            ? '0' + (`${song.duration}` % 60)
-                            : `${song.duration}` % 60}
+                        {
+                            Math.floor(`${currentSong.duration}` / 60) < 10
+                            ? '0' + Math.floor(`${currentSong.duration}` / 60)
+                            : Math.floor(`${currentSong.duration}` / 60)
+                        } : {   
+                            `${currentSong.duration}` % 60 < 10
+                            ? '0' + (`${currentSong.duration}` % 60)
+                            : `${currentSong.duration}` % 60
+                        }
                     </div>
-                )}
+                {/* )} */}
             </div>
         </div>
     );

@@ -43,8 +43,8 @@ const zingStorage = {
     setAddValueVolume: (data) => storage.set(VALUE_VOLUME, data),
     getAddValueVolume: () => storage.get(VALUE_VOLUME),
 
-    setIsRanDom: (data) => storage.set(IS_RANDOM, data),
-    getIsRanDom: () => storage.get(IS_RANDOM),
+    setIsRandom: (data) => storage.set(IS_RANDOM, data),
+    getIsRandom: () => storage.get(IS_RANDOM),
 
     setIsLoop: (data) => storage.set(IS_LOOP, data),
     getIsLoop: () => storage.get(IS_LOOP),

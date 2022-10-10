@@ -3,10 +3,11 @@ import zingStorage from '~/utils/storage';
 
 const initialState = {
     valueVolume: zingStorage.getAddValueVolume,
-    isPlay: true,
-    isLoop: '',
-    isRanDom: '',
+    isPlay: false,
+    isLoop: zingStorage.getIsLoop() || false,
+    isRandom: zingStorage.getIsRandom() || false,
 };
+
 
 const IconProject = (state = initialState, actions) => {
     switch (actions.type) {
@@ -18,25 +19,24 @@ const IconProject = (state = initialState, actions) => {
                 valueVolume: valueVolume,
             };
         case types.SET_ACTIVE_GET_IS_PLAY:
-            let isPlay = [state.isPlay];
-            isPlay.push(actions.payload);
             return {
                 ...state,
-                isPlay: isPlay ,
+                isPlay: actions.payload ,
             };
         case types.SET_ACTIVE_GET_IS_RANDOM:
-            let isRanDom = [state.isRanDom];
-            isRanDom.push(actions.payload);
+            console.log('loop', state.isLoop);
+            console.log('random', state.isRandom);
+            zingStorage.setIsRandom(actions.payload);
             return {
                 ...state,
-                isRanDom: isRanDom,
+                isRandom: actions.payload,
             };
         case types.SET_ACTIVE_GET_IS_LOOP:
-            let isLoop = [state.isLoop];
-            isLoop.push(actions.payload);
+            zingStorage.setIsLoop(actions.payload);
+            console.log(state.isLoop);
             return {
                 ...state,
-                isLoop: isLoop,
+                isLoop: actions.payload,
             };
         default:
             return state;
