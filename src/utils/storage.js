@@ -40,8 +40,8 @@ const zingStorage = {
     setCurrentSong: (data) => storage.set(CURRENT_SONG, data) || null,
     getCurrentSong: () => storage.get(CURRENT_SONG),
 
-    setAddValueVolume: (data) => storage.set(VALUE_VOLUME, data),
-    getAddValueVolume: () => storage.get(VALUE_VOLUME),
+    setValueVolume: (data) => storage.set(VALUE_VOLUME, data),
+    getValueVolume: () => storage.get(VALUE_VOLUME),
 
     setIsRandom: (data) => storage.set(IS_RANDOM, data),
     getIsRandom: () => storage.get(IS_RANDOM),

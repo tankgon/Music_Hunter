@@ -2,7 +2,10 @@ import * as types from '~/constant/actionTypes';
 import zingStorage from '~/utils/storage';
 
 const initialState = {
-    valueVolume: zingStorage.getAddValueVolume,
+    valueVolume: {
+        beforeVolume: 0,
+        volume: zingStorage.getValueVolume || 50
+    },
     isPlay: false,
     isLoop: zingStorage.getIsLoop() || false,
     isRandom: zingStorage.getIsRandom() || false,
@@ -12,11 +15,13 @@ const initialState = {
 const IconProject = (state = initialState, actions) => {
     switch (actions.type) {
         case types.SET_ACTIVE_GET_ICON_VOLUME:
-            let valueVolume = [state.valueVolume];
-            valueVolume.push(actions.payload);
+            zingStorage.setValueVolume(actions.payload);
             return {
                 ...state,
-                valueVolume: valueVolume,
+                valueVolume: {
+                    beforeVolume: state.valueVolume.volume,
+                    volume: actions.payload
+                },
             };
         case types.SET_ACTIVE_GET_IS_PLAY:
             return {
@@ -24,8 +29,6 @@ const IconProject = (state = initialState, actions) => {
                 isPlay: actions.payload ,
             };
         case types.SET_ACTIVE_GET_IS_RANDOM:
-            console.log('loop', state.isLoop);
-            console.log('random', state.isRandom);
             zingStorage.setIsRandom(actions.payload);
             return {
                 ...state,
@@ -33,7 +36,6 @@ const IconProject = (state = initialState, actions) => {
             };
         case types.SET_ACTIVE_GET_IS_LOOP:
             zingStorage.setIsLoop(actions.payload);
-            console.log(state.isLoop);
             return {
                 ...state,
                 isLoop: actions.payload,

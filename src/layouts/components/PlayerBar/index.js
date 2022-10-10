@@ -14,7 +14,7 @@ function PlayerBar({ playSong, musicRef }) {
     const isLoop = useSelector((state) => state.IconProject.isLoop)
     
     const currentSong = useSelector((state) => state.playMusicReducer.song);
-    const valueVolume = useSelector((state) => state.IconProject.valueVolume['1']/100)
+    const valueVolume = useSelector((state) => state.IconProject.valueVolume.volume)
     const listSong = useSelector((state) => state.musicsOfPageReducer);
     const [currentTimePercent, setCurrentTimePercent] = useState(0);
     const [LoadingNumber, setloadingNumber] = useState();
@@ -104,12 +104,11 @@ function PlayerBar({ playSong, musicRef }) {
         const ct = musicRef.current.currentTime;
         setCurrentTimePercent((ct / duration) * 100);
         setloadingNumber(parseInt(ct));
+        musicRef.current.volume = valueVolume/100;
     };
 
     const onChangeValue = (e) => {
-        if(e.target.value){
-            musicRef.current.currentTime = (e.target.value * Math.ceil(musicRef.current.duration)/100);
-        }
+            musicRef.current.currentTime = (e.target.value * Math.ceil(musicRef.current.duration)/100);      
     };
 
     return (
@@ -199,7 +198,7 @@ function PlayerBar({ playSong, musicRef }) {
                     value={currentTimePercent}
                     min='0'
                     max='100'
-                    onChange={onChangeValue}
+                    onInput={onChangeValue}
                 ></input>
 
                 {/* {!currentSong.duration ? (

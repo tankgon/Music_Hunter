@@ -25,7 +25,7 @@ export const addNameHistory = (data) => ({
     payload: data,
 });
 
-export const addValueVolume = (data) => ({
+export const setValueVolume = (data) => ({
     type: types.SET_ACTIVE_GET_ICON_VOLUME,
     payload: data,
 });
