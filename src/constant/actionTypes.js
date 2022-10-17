@@ -1,6 +1,8 @@
 // khai báo các const action cho reducer
 export const ADD_SONG_TO_LIBRARY = 'ADD_SONG_TO_LIBRARY';
 
+export const ADD_SONG_TO_HISTORY = 'ADD_SONG_TO_HISTORY'
+
 export const REMOVE_SONG_IN_LIBRARY = 'REMOVE_SONG_IN_LIBRARY';
 
 export const ADD_PLAYLIST_TO_LIBRARY = 'ADD_PLAYLIST_TO_LIBRARY';
@@ -13,7 +15,7 @@ export const PLAY_MUSIC = 'PLAY_MUSIC';
 
 export const MUSICS_OF_PAGE = 'MUSICS_OF_PAGE';
 
-export const ADD_PLAYLIST_TO_HISTORY = 'ADD_PLAYLIST_TO_HISTORY';
+export const SET_CURRENT_PLAYLIST = 'SET_CURRENT_PLAYLIST';
 
 //Icon
 export const SET_ACTIVE_GET_ICON_VOLUME = 'SET_ACTIVE_GET_ICON_VOLUME';

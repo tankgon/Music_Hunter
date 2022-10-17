@@ -59,19 +59,7 @@ function MusicItemUser({ className, song, number, ranking }) {
 
     const handlePlayMusic = (song) => {
         dispatch(playMusic(song));
-        if(song?.encodeId){
-            if(zingStorage.getHistorySong()){
-                console.log(song);
-                if(zingStorage.getHistorySong().findIndex(playlist => playlist?.encodeId === song?.encodeId ) === -1) {
-                    dispatch(addHistorySong(song))
-                }
-            }
-            else{
-                if(zingStorage.getHistorySong() == null) {
-                    dispatch(addHistorySong(song))
-                } 
-            } 
-        }
+        dispatch(addHistorySong(song))
     };
 
 

@@ -8,15 +8,21 @@ const cx = classNames.bind(styles)
 
 function HistorySong() {
 
-  return (
-    <div className={cx('song-list')}>
-        {(zingStorage.getHistorySong()) ? 
-            zingStorage.getHistorySong().map(song => {
-                return ( <MusicItem song={song} /> )
-        })  : null}
-        
-    </div>
-  )
+    return (
+        <div className={cx('song-list')}>
+            {
+                (zingStorage.getHistorySong()) ?
+                zingStorage.getHistorySong().map(song => {
+                    return (
+                        <MusicItem
+                            key={song.encodeId} 
+                            song={song} 
+                        />
+                    )
+                }) : null
+            }
+        </div>
+    )
 }
 
 export default HistorySong

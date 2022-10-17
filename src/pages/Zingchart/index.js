@@ -28,7 +28,11 @@ function Zingchart() {
                 .get(`https://apizingmp3.herokuapp.com/api/charthome`)
                 .then((res) => res.data.data);
             setMusic(data);
-            dispatch(musicOfPage(data.RTChart.items));
+            const playlist = {
+                title: "#ZingChart",
+                songs: data.RTChart.items
+            }
+            dispatch(musicOfPage(playlist));
             setChartInfo(data.RTChart.chart);
         };
         fetchData();

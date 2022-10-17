@@ -15,23 +15,22 @@ import axios from 'axios';
 const cx = classNames.bind(styles);
 
 function MusicControl() {
-    const initValue = zingStorage.getAddValueVolume() || 50;
     const dispatch = useDispatch();
+    const valueVolume = useSelector(state => state.IconProject.valueVolume);
     const [toggleBtn, setToggleBtn] = useState(false);
     const [activePlaylist, setActivePlaylist] = useState(false);
-    const [valueInput, setvalueInput] = useState(initValue || 50);
+    const [valueInput, setValueInput] = useState(valueVolume.volume);
     const [playSong, setPlaySong] = useState('');
 
     const musicRef = useRef();
     const song = useSelector((state) => state.playMusicReducer.song);
 
     const onChangeValue = (e) => {
-        setvalueInput(parseInt(e.target.value));
+        setValueInput(parseInt(e.target.value));
     };
 
     useEffect(() => {
-        dispatch(actions.addValueVolume(valueInput));
-        zingStorage.setAddValueVolume(valueInput);
+        dispatch(actions.setValueVolume(valueInput));
     }, [valueInput]);
 
     function handleTogglePlaylist() {
@@ -44,15 +43,12 @@ function MusicControl() {
     }
 
     const handleMute = () => {
-        if (zingStorage.getAddValueVolume() === 0) {
-            dispatch(actions.addValueVolume(20));
-            zingStorage.setAddValueVolume(20);
-            setvalueInput(20)
+        if(valueInput !==0) {
+            setValueInput(0)
         } else {
-            dispatch(actions.addValueVolume(0));
-            zingStorage.setAddValueVolume(0);
-            setvalueInput(0)
+            setValueInput(valueVolume.beforeVolume)
         }
+        
     };
 
     useEffect(() => {
@@ -114,6 +110,7 @@ function MusicControl() {
 
                 <div className={cx('control-volume', 'flex items-center')}>
                     <Icon
+                        isActive={valueInput===0? true : false}
                         activeNoColor
                         icon={<i className='fal fa-volume'></i>}
                         activeIcon={<i className='fal fa-volume-mute'></i>}

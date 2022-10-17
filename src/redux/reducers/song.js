@@ -1,4 +1,5 @@
 import * as types from "~/constant/actionTypes";
+import { storage } from "~/firebase/config";
 import zingStorage from "~/utils/storage";
 
 //songReducer để xử lí các action liên quan đến song
@@ -6,7 +7,8 @@ import zingStorage from "~/utils/storage";
 const initialState = {
     isPlaying: false,
     librarySong: zingStorage.getLibrarySong() || [],
-    list: [],
+    libraryHistory: zingStorage.getHistorySong() || [],
+    currentSong: zingStorage.getCurrentSong() || null,
     nameMV: '',
     nameHistory: '',
 }
@@ -28,7 +30,24 @@ const songReducer = (state = initialState, actions) => {
                 ...state,
                 librarySong: [...actions.payload]
             }
+            
+        case types.ADD_SONG_TO_HISTORY:
+            const crSong = zingStorage.getCurrentSong()
+            const indexSongInHistory = state.libraryHistory.findIndex(song => (
+                song.encodeId === crSong.encodeId
+            ))
+            const newList = [...state.libraryHistory]
+            if(indexSongInHistory !== -1) {
+                newList.splice(indexSongInHistory, 1)
+            }
+            newList.unshift(actions.payload)
+            zingStorage.setHistorySong([...newList])
+            return {
+                ...state,
+                libraryHistory: [...newList]
+            }
 
+            // something
         case types.SET_ACTIVE_GET_NAME_MV:      
             let nameMV =[state.nameMV]
             nameMV.push(actions.payload)     

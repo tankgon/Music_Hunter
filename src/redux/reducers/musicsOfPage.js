@@ -1,11 +1,17 @@
 import * as types from '~/constant/actionTypes';
 
-const initialState = [];
+const initialState = {
+    title: '',
+    songs: []
+};
 
 const musicsOfPageReducer = (state = initialState, actions) => {
     switch (actions.type) {
         case types.MUSICS_OF_PAGE:
-            return [...actions.payload];
+            return {
+                title: actions.payload.title,
+                songs: actions.payload.songs
+            };
         default:
             return state;
     }

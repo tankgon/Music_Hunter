@@ -22,10 +22,6 @@ function Film() {
     
   },[id])
 
-  console.log(listrender);
-
-
-
   const artists = () =>{
     if(listrender.artists){
       return listrender.artists.map((item, index)=>{

@@ -5,7 +5,10 @@ import zingStorage from "~/utils/storage";
 
 const initialState = {
     libraryPlaylist: zingStorage.getLibraryPlaylist() || [],
-    libraryHistory: zingStorage.getHistorySong() || [],
+    currentPlaylist: {
+        title: zingStorage.getCurrentPlaylist().title || "",
+        songs: zingStorage.getCurrentPlaylist().songs || null,
+    }
 }
 
 const playlistReducer = (state = initialState, actions) => {
@@ -16,11 +19,14 @@ const playlistReducer = (state = initialState, actions) => {
                 ...state,
                 libraryPlaylist: [...state.libraryPlaylist, actions.payload]
             }
-        case types.ADD_PLAYLIST_TO_HISTORY:
-            zingStorage.setHistorySong([...state.libraryHistory, actions.payload])
+        case types.SET_CURRENT_PLAYLIST:
+            zingStorage.setCurrentPlaylist(actions.payload)
             return {
                 ...state,
-                libraryHistory: [...state.libraryHistory, actions.payload]
+                currentPlaylist: {
+                    title: actions.payload.title,
+                    songs: actions.payload.songs,
+                }
             }
         default:
             return state;
