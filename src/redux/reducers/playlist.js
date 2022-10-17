@@ -6,8 +6,8 @@ import zingStorage from "~/utils/storage";
 const initialState = {
     libraryPlaylist: zingStorage.getLibraryPlaylist() || [],
     currentPlaylist: {
-        title: zingStorage.getCurrentPlaylist().title || "",
-        songs: zingStorage.getCurrentPlaylist().songs || null,
+        title: zingStorage.getCurrentPlaylist()?.title || "",
+        songs: zingStorage.getCurrentPlaylist()?.songs || null,
     }
 }
 
