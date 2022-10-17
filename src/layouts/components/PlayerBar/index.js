@@ -12,10 +12,10 @@ function PlayerBar({ playSong, musicRef }) {
     const isRandom = useSelector((state) => state.IconProject.isRandom)
     const isPlay = useSelector((state) => state.IconProject.isPlay)
     const isLoop = useSelector((state) => state.IconProject.isLoop)
+    const valueVolume = useSelector((state) => state.IconProject.valueVolume.volume)
     
     const currentSong = useSelector((state) => state.playMusicReducer.song);
-    const valueVolume = useSelector((state) => state.IconProject.valueVolume.volume)
-    const listSong = useSelector((state) => state.musicsOfPageReducer);
+    const listSong = useSelector((state) => state.musicsOfPageReducer.songs);
     const [currentTimePercent, setCurrentTimePercent] = useState(0);
     const [LoadingNumber, setloadingNumber] = useState();
     
@@ -80,6 +80,7 @@ function PlayerBar({ playSong, musicRef }) {
             nextSong()
         }
         dispatch(addValueIsPlay(true))
+        dispatch(addHistorySong(zingStorage.getCurrentSong()))
     };
 
     const handlePrevSong = () => {
@@ -89,7 +90,9 @@ function PlayerBar({ playSong, musicRef }) {
             prevSong()
         }
         dispatch(addValueIsPlay(true))
+        dispatch(addHistorySong(zingStorage.getCurrentSong()))
     }
+
 
     //kết thúc audio sẽ làm gì ...
     const handleOnEnd = () => {
@@ -152,7 +155,7 @@ function PlayerBar({ playSong, musicRef }) {
                     isActive={isLoop}
                     className={cx('icon')}
                     icon={<i className='fal fa-repeat'></i>}
-                    activeIcon={<i className='fal fa-repeat'></i>}
+                    activeIcon={<i className="fal fa-repeat-1"></i>}
                     onClick={toggleLoop}
                 />
             </div>

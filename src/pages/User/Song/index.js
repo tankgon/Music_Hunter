@@ -14,10 +14,14 @@ function UserSong() {
     const dispatch = useDispatch();
     useEffect(() => {
         const mySongs = zingStorage.getLibrarySong()?.slice().reverse() || [];
+        const userPlaylist = {
+            title: 'Nhạc cá nhân',
+            songs: mySongs
+        }
 
         if (!!mySongs) {
             setMySongs(mySongs);
-            dispatch(musicOfPage(mySongs));
+            dispatch(musicOfPage(userPlaylist));
         }
     }, []);
 

@@ -1,44 +1,66 @@
+import { useEffect, useMemo } from 'react';
 import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import styles from './PlaySongIcon.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { addValueIsPlay, addHistorySong } from '../../../redux/actions';
+import { addValueIsPlay, setCurrentPlaylist } from '../../../redux/actions';
+import Icon from '..';
+import playlistReducer from '~/redux/reducers/playlist';
 const cx = classNames.bind(styles)
 
 function PlaySongIcon({className, data = {encodeId: null}}) {
     const dispatch = useDispatch();
-    const isPlay = useSelector((state) => state.IconProject.isPlay['1']) || false
+    const isPlay = useSelector((state) => state.IconProject.isPlay)
     const song = useSelector((state) => state.playMusicReducer.song);
-    const classIcon = ['fas fa-play', 'fas fa-waveform']
+    const musicsOfPage = useSelector(state => state.musicsOfPageReducer)
+    const currentPlaylist = useSelector(state => state.playlistReducer.currentPlaylist)
 
-    const handleClick = () => {
-        dispatch(addValueIsPlay(true));
+    const togglePlay = () => {
+        if(isPlay) {
+            dispatch(addValueIsPlay(false));
+        } else {
+            dispatch(addValueIsPlay(true));
+        }
     };
+
+    const hanldePlayNewMusic = () => {
+        if(currentPlaylist.songs === musicsOfPage) {
+            dispatch(addValueIsPlay(true));
+            console.log("true");
+        } else {
+            dispatch(setCurrentPlaylist(musicsOfPage))
+            dispatch(addValueIsPlay(true));
+            console.log("false");
+        }
+    }
     return (
         <>
-            {data?.encodeId === song?.encodeId && isPlay === true ? (
-                <button className={cx('wrapper', className)} onClick={() => dispatch(addValueIsPlay(false))}>
-                    <span className={cx('icon')}>
-                        <i className={cx(classIcon[1])}></i>
-                    </span>
+            {data?.encodeId === song?.encodeId && (
+                <button className={cx('wrapper', className)}>
+                    <Icon
+                        activeNoColor
+                        s18
+                        isActive={isPlay}
+                        className={cx('icon')}
+                        icon={<i className='fas fa-play'></i>}
+                        activeIcon={<i className='fas fa-waveform'></i>}
+                        onClick={togglePlay}
+                    />
                 </button>
-            ) : null}
+            ) }
 
-            {data?.encodeId === song?.encodeId && isPlay === false ? (
-                <button className={cx('wrapper', className)} onClick={() => dispatch(addValueIsPlay(true))}>
-                    <span className={cx('icon')}>
-                        <i className={cx(classIcon[0])}></i>
-                    </span>
+            {data?.encodeId !== song?.encodeId && (
+                <button className={cx('wrapper', className)} >
+                    <Icon
+                        s18
+                        isActive={false}
+                        className={cx('icon')}
+                        icon={<i className='fas fa-play'></i>}
+                        activeIcon={<i className='fas fa-waveform'></i>}
+                        onClick={hanldePlayNewMusic}
+                    />
                 </button>
-            ): null}
-
-            {data?.encodeId !== song?.encodeId ? (
-                <button className={cx('wrapper', className)} onClick={handleClick}>
-                    <span className={cx('icon')}>
-                        <i className={cx(classIcon[0])}></i>
-                    </span>
-                </button>
-            ): null}
+            )}
         </>
     );
 }

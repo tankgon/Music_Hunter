@@ -18,6 +18,29 @@
     }
 }
 
+.s-wrapper {
+    border-radius: 5px;
+    border-bottom: 0;
+    .media {
+        display: flex;
+        justify-content: space-between;
+    }
+    .hover-items {
+        .item {
+            margin: 0px;
+        }
+    }
+    &:hover {
+        .media-left.full-left {
+            flex-grow: 0;
+        }
+    }
+
+    &.song-playing {
+        background-color: var(--primary-color);
+    }
+}
+
 .media {
     display: flex;
     align-items: center;
@@ -34,6 +57,11 @@
     align-items: center;
     width: 50%;
     margin-right: 10px;
+
+    &.full-left {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
 
     .prefix {
         display: flex;
@@ -158,6 +186,10 @@
 .singer-name {
     margin-top: 2px;
     color: var(--text-secondary);
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .media-content {
@@ -204,7 +236,6 @@
         align-items: center;
         justify-content: center;
         flex-grow: 1;
-        font-size: 12px;
         margin: 0 4px;
     }
 }

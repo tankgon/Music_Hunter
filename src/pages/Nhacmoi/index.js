@@ -18,7 +18,11 @@ function Nhacmoi() {
             const data = await axios
                 .get(`https://apizingmp3.herokuapp.com/api/newreleasechart`)
                 .then((res) => res.data.data);
-            dispatch(musicOfPage(data.items));
+            const playlist = {
+                title: data.title,
+                songs: data.items
+            }
+            dispatch(musicOfPage(playlist));
             setMusic(data);
         };
         fetchData();

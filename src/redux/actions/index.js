@@ -51,7 +51,7 @@ export const playMusic = (data) => ({
 });
 
 export const addHistorySong = (data) => ({
-    type: types.ADD_PLAYLIST_TO_HISTORY,
+    type: types.ADD_SONG_TO_HISTORY,
     payload: data,
 });
 
@@ -59,3 +59,8 @@ export const musicOfPage = (data) => ({
     type: types.MUSICS_OF_PAGE,
     payload: data,
 });
+
+export const setCurrentPlaylist = (data) => ({
+    type: types.SET_CURRENT_PLAYLIST,
+    payload: data
+})
