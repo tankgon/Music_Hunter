@@ -4,7 +4,7 @@ import zingStorage from '~/utils/storage';
 const initialState = {
     valueVolume: {
         beforeVolume: 0,
-        volume: zingStorage.getValueVolume || 50
+        volume: zingStorage.getValueVolume() || 50
     },
     isPlay: false,
     isLoop: zingStorage.getIsLoop() || false,

@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
-import {
-    searchByKeyword,
-    getTopKeyword
-  } from "nhaccuatui-api-full";
+import { getTopKeyword } from "nhaccuatui-api-full";
 
 import Wrapper from '~/components/Popper';
 import { useDebounce } from '~/hooks';
@@ -12,6 +9,7 @@ import styles from './Search.module.scss';
 import images from "~/images";
 import Image from '~/components/Image';
 import axios from 'axios';
+import SmallMusicItemUser from '~/components/MusicItem/SmallMusicItem';
 
 const cx = classNames.bind(styles);
 
@@ -77,27 +75,7 @@ function Search() {
             return (
                 searchResult.songs.map(item => {
                     return (
-                        <div key={item.encodeId} className={cx('result-item')}>
-                            <div className={cx('cd')}>
-                                <Image 
-                                    className={cx('cd-thumb')}
-                                    src={item.thumbnail || item.thumbnailM}
-                                    alt={item.title}
-                                    defaultAvt={images.defaultAvataSong}
-                                />
-                            </div>
-                            <div className={cx('media-content')}>
-                                <div className={cx('song-name','text-sm')}>{item.title}</div>
-                                <div className={cx('singer-name', 'text-xs')}>
-                                    {item.artists.map((artist, index) => (
-                                        <span key={index}>
-                                            {artist.name}
-                                            {item.artists.length === index + 1 ? "" : ", "}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+                        <SmallMusicItemUser key={item.encodeId} isPlaying song={item} />
                     )
                 })
             )
