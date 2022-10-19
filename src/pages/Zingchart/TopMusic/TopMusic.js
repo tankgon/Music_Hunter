@@ -14,7 +14,7 @@ const TopMusic = (props) => {
             </div>
 
             {data.map((item, index) => (
-                <div className={cx('container')}>
+                <div key={index} className={cx('container')}>
                     <div className={cx('music-rank')}>
                         <span className={cx('num')}>{index + 1}</span>
                         <span className={cx('line')}></span>

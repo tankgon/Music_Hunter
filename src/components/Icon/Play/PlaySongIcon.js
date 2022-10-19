@@ -26,11 +26,9 @@ function PlaySongIcon({className, data = {encodeId: null}}) {
     const hanldePlayNewMusic = () => {
         if(currentPlaylist.songs === musicsOfPage) {
             dispatch(addValueIsPlay(true));
-            console.log("true");
         } else {
             dispatch(setCurrentPlaylist(musicsOfPage))
             dispatch(addValueIsPlay(true));
-            console.log("false");
         }
     }
     return (

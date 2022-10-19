@@ -30,10 +30,8 @@ const Top100KOREA = () => {
                     <LazyLoadComponent key={index}>
                         <MusicItem
                             number={index + 1}
-                            title={item.title}
-                            name={item.album ? item.album.title : ''}
-                            artistsNames={item.artistsNames}
-                            thumbnail={item.thumbnail || item.thumbnailM}
+                            ranking
+                            song={item}
                         />
                     </LazyLoadComponent>
                 ))
