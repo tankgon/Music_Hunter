@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
+import getHome from '~/api/getHome';
 import styles from './MusicControl.module.scss';
 import Media from '~/components/Media';
 import PlayerBar from '~/layouts/components/PlayerBar';
@@ -34,29 +34,22 @@ function MusicControl() {
     }, [valueInput]);
 
     function handleTogglePlaylist() {
-        if (toggleBtn) {
-            setToggleBtn(false);
-        } else {
-            setToggleBtn(true);
-        }
+        if (toggleBtn) setToggleBtn(false);
+        else  setToggleBtn(true);
         activePlaylist ? setActivePlaylist(false) : setActivePlaylist(true);
     }
 
     const handleMute = () => {
-        if(valueInput !==0) {
-            setValueInput(0)
-        } else {
-            setValueInput(valueVolume.beforeVolume)
-        }
-        
+        if(valueInput !==0) setValueInput(0)
+        else setValueInput(valueVolume.beforeVolume)
     };
 
     useEffect(() => {
-        axios
-            .get(
-                `https://apizingmp3.herokuapp.com/api/song?id=${song.encodeId}`
-            )
-            .then((res) => setPlaySong(res.data.data));
+        const songRender = async() => {
+            const res = await getHome.getSong(`${song.encodeId}`)
+            setPlaySong(res.data)
+        }
+        songRender()
     }, [song]);
 
     return (

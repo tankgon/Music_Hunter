@@ -4,25 +4,23 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import styles from './Radio.module.scss'
 import Loading from './Loading/Loading';
+import getHome from '../../api/getHome';
 const cx = classNames.bind(styles)
 
 function Radio() {
     const [listRadio, setListRadio] = useState()
     useEffect(() => {
-        function homePage5() {
-            axios   
-                .get(`https://apizingmp3.herokuapp.com/api/home`, {params: {page: 5}})
-                .then((res) => {
-                    setListRadio(res.data.data.items[1].items)
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        }
-        homePage5()
+        const homePage3 = async () => {
+            try {
+                const res = await getHome.homePage3();
+                setListRadio(res.data.data.items[0]);   
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        homePage3()
 
-        document.title =
-            'Radio | Xem bài hát, album, MV đang hot nhất hiện tại';
+        document.title = 'Radio | Xem bài hát, album, MV đang hot nhất hiện tại';
     }, [])
 
     const renderLoading = () => {
@@ -31,7 +29,7 @@ function Radio() {
                 <div className={cx('wrapper')}>
                     <div className={cx('section')}>
                         <div className={cx('list-slide')}>
-                            <SlideRadio listRadio={listRadio} />
+                            <SlideRadio listRadio={listRadio}/>
                         </div>
                     </div>
                 </div>

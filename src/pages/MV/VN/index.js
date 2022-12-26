@@ -22,8 +22,6 @@ function MVVN() {
         <Content/>
       </div>
 
-
-
     </div>
 
     

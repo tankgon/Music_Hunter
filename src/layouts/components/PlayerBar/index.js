@@ -8,6 +8,7 @@ import styles from './PlayerBar.module.scss';
 const cx = classNames.bind(styles);
 
 function PlayerBar({ playSong, musicRef }) {
+
     const dispatch = useDispatch();
     const isRandom = useSelector((state) => state.IconProject.isRandom)
     const isPlay = useSelector((state) => state.IconProject.isPlay)
@@ -21,7 +22,7 @@ function PlayerBar({ playSong, musicRef }) {
     
     const currentIndex = listSong.findIndex(playlist => playlist?.encodeId === currentSong?.encodeId)
 
-    if (currentTimePercent) {
+    if (currentTimePercent && currentTimePercent != null) {
         if (isPlay) musicRef.current.play();
         else musicRef.current.pause();
     }
@@ -37,19 +38,13 @@ function PlayerBar({ playSong, musicRef }) {
     }
 
     const toggleRandom = () => {
-        if (isRandom) {
-            dispatch(setRandom(false));
-        } else {
-            dispatch(setRandom(true));
-        }
-    };
+        if (isRandom) dispatch(setRandom(false))
+        else dispatch(setRandom(true))
+    }
 
     const toggleLoop = () => {
-        if (isLoop) {
-            dispatch(setLoop(false));
-        } else {
-            dispatch(setLoop(true));
-        }
+        if (isLoop) dispatch(setLoop(false));
+        else dispatch(setLoop(true));
     };
 
     const playRandomSong = () => {
@@ -58,37 +53,25 @@ function PlayerBar({ playSong, musicRef }) {
     }
 
     const nextSong = () => {
-        if(currentIndex < listSong.length - 1) {
-            dispatch(playMusic(listSong[currentIndex + 1]));
-        } else {
-            dispatch(playMusic(listSong[0]));
-        }
+        if(currentIndex < listSong.length - 1) dispatch(playMusic(listSong[currentIndex + 1]));
+        else dispatch(playMusic(listSong[0]));
     }
 
     const prevSong = () => {
-        if(currentIndex === 0) {
-            dispatch(playMusic(listSong[listSong.length - 1]));
-        } else {
-            dispatch(playMusic(listSong[currentIndex - 1]));
-        }
+        if(currentIndex === 0) dispatch(playMusic(listSong[listSong.length - 1]));
+        else dispatch(playMusic(listSong[currentIndex - 1]));
     }
 
     const handleNextSong = () => {
-        if(isRandom){
-            playRandomSong()
-        } else {
-            nextSong()
-        }
+        if(isRandom)playRandomSong()
+        else nextSong()
         dispatch(addValueIsPlay(true))
         dispatch(addHistorySong(zingStorage.getCurrentSong()))
     };
 
     const handlePrevSong = () => {
-        if(isRandom){
-            playRandomSong()
-        } else {
-            prevSong()
-        }
+        if(isRandom) playRandomSong()
+        else prevSong()
         dispatch(addValueIsPlay(true))
         dispatch(addHistorySong(zingStorage.getCurrentSong()))
     }
@@ -179,9 +162,9 @@ function PlayerBar({ playSong, musicRef }) {
                     </div>
                 )}
 
-                {playSong && (
+                {playSong  && (
                     <audio
-                        src={playSong['128']}
+                        src={playSong.data['128']}
                         type='audio'
                         autoPlay={isPlay}
                         ref={musicRef}

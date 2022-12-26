@@ -21,14 +21,8 @@ function MV() {
   }
   useEffect(() => {
     dispatch(actions.addNameMV(getNameUrl));
+    document.title = 'Video | Tuyển tập nhạc hay chọn lọc';
   }, [getNameUrl]);
-  
-  useEffect(() => {
-    document.title =
-    'Video | Tuyển tập nhạc hay chọn lọc';
-  }, [])
-
-
 
   return (
     <div>

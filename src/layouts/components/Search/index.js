@@ -2,13 +2,12 @@ import { useState, useEffect, useRef, Fragment } from 'react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { getTopKeyword } from "nhaccuatui-api-full";
-
+import getHome from '~/api/getHome';
 import Wrapper from '~/components/Popper';
 import { useDebounce } from '~/hooks';
 import styles from './Search.module.scss';
 import images from "~/images";
 import Image from '~/components/Image';
-import axios from 'axios';
 import SmallMusicItemUser from '~/components/MusicItem/SmallMusicItem';
 
 const cx = classNames.bind(styles);
@@ -28,34 +27,19 @@ function Search() {
             try {
                 const res = await getTopKeyword()
                 setTopSearchs(res.listKeyValue)
+                if(!searchValue.trim()) {
+                    setSearchResult()
+                    return; 
+                }
+                const res1 = await getHome.getSearch(`${searchValue}`)
+                console.log(res1, searchValue);
+                setSearchResult(res1.data.data)
             } catch (error) {
                 // alert(error);
             }
         };
         getTopSearch();
-    },[])
-
-    useEffect(() => {
-            if(!searchValue.trim()) {
-                setSearchResult()
-                return; 
-            }
-
-        axios   
-            .get(`https://apizingmp3.herokuapp.com/api/search`, {
-                params: {
-                    keyword: searchValue,
-                }
-            })
-            .then((res) => {
-                setSearchResult(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    }, [debouncedValue])
-
-
+    },[debouncedValue])
 
     function renderTopSearch() {
         if(topSearchs) {
@@ -74,9 +58,7 @@ function Search() {
         if(searchResult && searchResult !== '') {
             return (
                 searchResult.songs.map(item => {
-                    return (
-                        <SmallMusicItemUser key={item.encodeId} isPlaying song={item} />
-                    )
+                    return ( <SmallMusicItemUser key={item.encodeId} isPlaying song={item} />)
                 })
             )
         }

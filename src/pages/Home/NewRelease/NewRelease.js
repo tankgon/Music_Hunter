@@ -11,7 +11,7 @@ function NewRelease({ data }) {
         <div className={cx('wrapper')}>
             <a href="#" className={cx('nav-btn', 'active')}>Bài hát</a>
             <div className={cx('list-song')}>
-                {data.song.map((song, index) => {
+                {data.items.all.map((song, index) => {
                     if(index<12) {  //giới hạn render 12 bài
                         return(
                             <div 

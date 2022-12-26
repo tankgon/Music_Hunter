@@ -1,25 +1,22 @@
 import axios from "./axiosConfig";
 
-function homePage1() {
-    return axios.get('/api/home?page=1')
+function homePage(id) {
+    return axios.get(`/api/home?page=${id}`)
 }
-function homePage2() {
-    return axios.get('/api/home?page=2')
+const getSearch =(id)=>{
+    return axios.get(`/api/search?keyword={${id}}`)
 }
-function homePage3() {
-    return axios.get('/api/home?page=3')
+const getSong =(id)=>{
+    return axios.get(`/api/song?id=${id}`)
 }
-function homePage4() {
-    return axios.get('/api/home?page=4')
-}
-function homePage5() {
-    return axios.get('/api/home?page=5')
+const getTop100 =(id)=>{
+    return axios.get(`/api/top100`)
 }
 
 export default {
-    homePage1,
-    homePage2,
-    homePage3,
-    homePage4,
-    homePage5,
+    homePage,
+    getSearch,
+    getSong,
+    getTop100,
+    getTop100
 }

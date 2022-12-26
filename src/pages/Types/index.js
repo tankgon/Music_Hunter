@@ -1,20 +1,20 @@
 import classNames from 'classnames/bind';
 import styles from './Types.module.scss';
-import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles';
-import { useCallback } from 'react';
+// import Particles from 'react-tsparticles';
+// import { loadFull } from 'tsparticles';
+// import { useCallback } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Types() {
-    const particlesInit = useCallback(async (engine) => {
-        await loadFull(engine);
-    }, []);
+    // const particlesInit = useCallback(async (engine) => {
+    //     await loadFull(engine);
+    // }, []);
 
     return (
         <div className={cx('wrapper')}>
             <h1>Zing MP3</h1>
-            <Particles
+            {/* <Particles
                 id='tsparticles'
                 init={particlesInit}
                 options={{
@@ -226,7 +226,7 @@ function Types() {
                     },
                     detectRetina: true,
                 }}
-            />
+            /> */}
         </div>
     );
 }

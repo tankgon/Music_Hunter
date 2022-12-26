@@ -16,7 +16,7 @@ function Nhacmoi() {
     useEffect(() => {
         const fetchData = async () => {
             const data = await axios
-                .get(`https://apizingmp3.herokuapp.com/api/newreleasechart`)
+                .get(`https://apizingmp3.vercel.app/api/newreleasechart`)
                 .then((res) => res.data.data);
             const playlist = {
                 title: data.title,
@@ -26,7 +26,6 @@ function Nhacmoi() {
             setMusic(data);
         };
         fetchData();
-
         document.title = '#zingchart tuần, #zingchart Zing - Bài hát';
     }, []);
     return (

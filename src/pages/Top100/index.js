@@ -4,6 +4,7 @@ import axios from 'axios';
 import Loading from './Loading/Loading';
 import Playlist from '~/components/Playlist';
 import styles from './Top100.module.scss';
+import getHome from '~/api/getHome';
 import { ReactComponent as Banner } from '~/images/bannertop100.svg';
 
 const cx = classNames.bind(styles);
@@ -16,21 +17,21 @@ function Top100() {
     const [musicConcert, setMusicConcert] = useState();
 
     useEffect(() => {
-        function homePage5() {
-            axios
-                .get(`https://apizingmp3.herokuapp.com/api/top100`)
-                .then((res) => {
-                    setTopMusic(res.data.data[0].items);
-                    setMusicVN(res.data.data[1].items);
-                    setMusicAsia(res.data.data[2].items);
-                    setMusicUsUk(res.data.data[3].items);
-                    setMusicConcert(res.data.data[4].items);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+        const getTop = async() => {
+            try{
+                const res = await getHome.getTop100()
+                setTopMusic(res.data.data[0].items);
+                setMusicVN(res.data.data[1].items);
+                setMusicAsia(res.data.data[2].items);
+                setMusicUsUk(res.data.data[3].items);
+                setMusicConcert(res.data.data[4].items);
+                console.log(res);
+            }
+            catch (err){
+                console.log(err);
+            }
         }
-        homePage5();
+        getTop()
     }, []);
     
 
@@ -44,12 +45,12 @@ function Top100() {
                         <div className={cx('bg-blur-2')}></div>
                         <Banner className={cx('banner-svg')} />
                     </div>
+
                     <div className={cx('section')}>
                         <h3 className={cx('section-title')}>Nổi bật</h3>
                         <div className={cx('list-playlist')}>
                             {topMusic &&
                                 topMusic.map((playlist, index) => {
-                                    if (index < 5) {
                                         return (
                                             <Playlist
                                                 key={playlist.encodeId}
@@ -78,9 +79,8 @@ function Top100() {
                                                 }
                                                 titleIconLeft='Thêm vào thư viện'
                                             />
-                                        );
-                                    }
-                                })}
+                                        );   
+                                }).slice(0, 5)}
                         </div>
                     </div>
                     <div className={cx('section')}>

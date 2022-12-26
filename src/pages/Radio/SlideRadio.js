@@ -51,10 +51,12 @@ function SlideRadio({ listRadio }) {
         return (306 - percentCircle)
     }
 
+
+
     return ( 
         <div>
             <Slider {...propsSlide7} >
-                {listRadio && listRadio.map((item) => {
+                {listRadio && listRadio.items.map((item) => {
                     return(
                         <div key={item.id} className={cx('card-wrapper')}>
                             <a className={cx('link-radio')} href='#'>

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL:`https://apizingmp3.herokuapp.com`,
+    baseURL:`https://apizingmp3.vercel.app`,
     // timeout: 10000,
 });
 instance.interceptors.request.use(function (config) {

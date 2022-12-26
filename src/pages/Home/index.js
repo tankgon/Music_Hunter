@@ -29,68 +29,44 @@ function Home() {
     const [topNewMusic, setTopNewMusic] = useState();
     const [playlistNewMusic, setPlaylistNewMusic] = useState();
     const [listRadio, setListRadio] = useState();
+    const [XONE, setXONE] = useState();
 
     useEffect(() => {
         document.title =
             'Zing MP3 | Nghe tải nhạc chất lượng cao trên destop, mobile và TV';
     }, []);
 
+    console.log(weekChart);
+
     useEffect(() => {
-        const homePage1 = async () => {
+        const gethomePage = async () => {
             try {
-                const res = await getHome.homePage1();
-                setGetSlide(res.data.data.items[0].items);
-                setNewRelease(res.data.data.items[3].items[0]);
-                setPlaylistToday(res.data.data.items[4].items);
+                const res1 = await getHome.homePage('1');
+                setGetSlide(res1.data.data.items[0].items);
+                setNewRelease(res1.data.data.items[4]);
+                setPlaylistToday(res1.data.data.items[2]);
+
+                const res2 = await getHome.homePage('2');
+                setMixArtists(res2.data.data.items[0]);
+
+                const res3 = await getHome.homePage('3');
+                setListRadio(res3.data.data.items[0]);
+                setNewMusic(res3.data.data.items[1]);
+                setWeekChart(res3.data.data.items[3]);
+
+                const res4 = await getHome.homePage('4');
+                setTop100(res4.data.data.items[0]);
+
+                const res5 = await getHome.homePage('5');
+                setPlaylistNewMusic(res5.data.data.items[1].items);
+                setTopNewMusic(res5.data.data.items[2]);
+                setXONE(res5.data.data.items[0])
+
             } catch (error) {
                 console.log(error);
             }
         };
-
-        const homePage2 = async () => {
-            try {
-                const res = await getHome.homePage2();
-                setNewMusic(res.data.data.items[1].items);
-                setMixArtists(res.data.data.items[0].items);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        const homePage3 = async () => {
-            try {
-                const res = await getHome.homePage3();
-                setWeekChart(res.data.data.items[0].items);
-                setTop100(res.data.data.items[2].items);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        const homePage4 = async () => {
-            try {
-                const res = await getHome.homePage4();
-                setTopNewMusic(res.data.data.items[0].items);
-                setPlaylistNewMusic(res.data.data.items[1].items);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        const homePage5 = async () => {
-            try {
-                const res = await getHome.homePage5();
-                setListRadio(res.data.data.items[1].items);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        homePage1();
-        homePage2();
-        homePage3();
-        homePage4();
-        homePage5();
+        gethomePage();
     }, []);
 
     const propsSlide5 = {
@@ -117,205 +93,82 @@ function Home() {
         arrows: false,
     };
 
-    const propsSlide7 = {
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 7,
-        slidesToScroll: 6,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        pauseOnHover: true,
-        arrows: false,
-    };
-
     return (
         <div className={cx('wrapper')}>
             {getSlide && <MySlide getSlide={getSlide} />}
-            <div className={cx('section')}>
-                <h3 className={cx('section-title')}>Mới Phát Hành</h3>
-                {newRelease && <NewRelease data={newRelease} />}
-            </div>
 
-            <div className={cx('section')}>
-                <h3 className={cx('section-title')}>Lựa chọn hôm nay</h3>
-                <div className={cx('list-playlist')}>
-                    {playlistToday &&
-                        playlistToday.map((playlist) => {
-                            return (
-                                <Playlist
-                                    key={playlist.encodeId}
-                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
-                                    name={playlist.title}
-                                    describe={playlist.sortDescription}
-                                    link='#' //mặc định
-                                    image={
-                                        playlist.thumbnail ||
-                                        playlist.thumbnailM
-                                    }
-                                    data={playlist}
-                                />
-                            );
-                        })}
-                </div>
-            </div>
-
-            <div className={cx('section')}>
-                <h3 className={cx('section-title')}>Nghệ sĩ yêu thích</h3>
-                <div className={cx('list-slide')}>
-                    <Slider {...propsSlide5}>
-                        {mixArtists &&
-                            mixArtists.map((artist, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className={cx('card-wrapper')}
-                                    >
-                                        <a
-                                            href='#'
-                                            className={cx('artists-card')}
-                                        >
-                                            <img
-                                                className={cx('card-img')}
-                                                src={artist.thumbnail}
-                                                alt=''
-                                            />
-                                            <div className={cx('card-content')}>
-                                                <h4
-                                                    className={cx(
-                                                        'name-artists'
-                                                    )}
-                                                >
-                                                    {artist.artistsNames}
-                                                </h4>
-                                                <div className={cx('thumbs')}>
-                                                    {artist.song.items.map(
-                                                        (thumb, index) => {
-                                                            if (index < 3) {
-                                                                return (
-                                                                    <div
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        className={cx(
-                                                                            'thumb'
-                                                                        )}
-                                                                    >
-                                                                        <img
-                                                                            className={cx(
-                                                                                'thumb-img'
-                                                                            )}
-                                                                            src={
-                                                                                thumb.thumbnail
-                                                                            }
-                                                                            alt=''
-                                                                        />
-                                                                    </div>
-                                                                );
-                                                            }
-                                                        }
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                );
-                            })}
-                    </Slider>
-                </div>
-            </div>
-
-            <div className={cx('section')}>
-                <h3 className={cx('section-title')}>Nhạc mới mỗi ngày</h3>
-                <div className={cx('list-playlist')}>
-                    {newMusic &&
-                        newMusic.map((playlist) => {
-                            return (
-                                <Playlist
-                                    key={playlist.encodeId}
-                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
-                                    name={playlist.title}
-                                    describe={playlist.sortDescription}
-                                    link='#' //mặc định
-                                    image={
-                                        playlist.thumbnail ||
-                                        playlist.thumbnailM
-                                    }
-                                    data={playlist}
-                                />
-                            );
-                        })}
-                </div>
-            </div>
-
-            <div className={cx('section')}>
-                <div className={cx('list-playlist')}>
-                    {weekChart &&
-                        weekChart.map((item, index) => {
-                            return (
-                                <div
-                                    key={index}
-                                    className={cx(
-                                        'card-wrapper',
-                                        'w-[33.33%] px-3.5 mb-7'
-                                    )}
-                                >
-                                    <div className={cx('card-banner')}>
-                                        <a
-                                            className={cx('card-link')}
-                                            href='#'
-                                        ></a>
-                                        <img
-                                            src={item.cover}
-                                            className={cx('card-img')}
-                                        />
-                                    </div>
-                                </div>
-                            );
-                        })}
-                </div>
-            </div>
-
-            <div className={cx('section')}>
+            {playlistToday ? <div className={cx('section')}>   
                 <div className={cx('section-header', 'flex justify-between')}>
-                    <h3 className={cx('section-title')}>Top 100</h3>
+                    <h3 className={cx('section-title')}>{playlistToday.title}</h3>
                     <Link to={'/top100'} className={cx('section-link')}>
                         Tất cả
                     </Link>
                 </div>
                 <div className={cx('list-playlist')}>
-                    {top100 &&
-                        top100.map((playlist, index) => {
-                            if (index < 5) {
-                                return (
-                                    <Playlist
-                                        key={playlist.encodeId}
-                                        className='w-[25%] px-3 md:w-[20%] md:px-3.5'
-                                        name={playlist.title}
-                                        describe={playlist.artists.map(
-                                            (artist, index) => {
-                                                return index <
-                                                    playlist.artists.length - 1
-                                                    ? `${artist.name}, `
-                                                    : `${artist.name}`;
-                                            }
-                                        )}
-                                        link='#' //mặc định
-                                        image={
-                                            playlist.thumbnail ||
-                                            playlist.thumbnailM
+                    {playlistToday.items.map((playlist, index) => {
+                        if (index < 5) {
+                            return (
+                                <Playlist
+                                    key={playlist.encodeId}
+                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
+                                    name={playlist.title}
+                                    describe={playlist.artists.map(
+                                        (artist, index) => {
+                                            return index < playlist.artists.length - 1 ? `${artist.name}, ` : `${artist.name}`;
                                         }
-                                        data={playlist}
-                                    />
-                                );
-                            }
-                        })}
+                                    )}
+                                    link='#' //mặc định
+                                    image={
+                                        playlist.thumbnail ||
+                                        playlist.thumbnailM
+                                    }
+                                    data={playlist}
+                                />
+                            );
+                    }})}
                 </div>
-            </div>
+            </div> : null }
+            
+            {newRelease ? <div className={cx('section')}>
+                <h3 className={cx('section-title')}>{newRelease.title}</h3>
+                <NewRelease data={newRelease} />
+            </div> : null} 
 
-            <div className={cx('section')}>
+            {mixArtists ? <div className={cx('section')}>   
                 <div className={cx('section-header', 'flex justify-between')}>
-                    <h3 className={cx('section-title')}>Radio nổi bật</h3>
+                    <h3 className={cx('section-title')}>{mixArtists.title}</h3>
+                    <Link to={'/top100'} className={cx('section-link')}>
+                        Tất cả
+                    </Link>
+                </div>
+                <div className={cx('list-playlist')}>
+                    {mixArtists.items.map((playlist, index) => {
+                        if (index < 5) {
+                            return (
+                                <Playlist
+                                    key={playlist.encodeId}
+                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
+                                    name={playlist.title}
+                                    describe={playlist.artists.map(
+                                        (artist, index) => {
+                                            return index < playlist.artists.length - 1 ? `${artist.name}, ` : `${artist.name}`;
+                                        }
+                                    )}
+                                    link='#' //mặc định
+                                    image={
+                                        playlist.thumbnail ||
+                                        playlist.thumbnailM
+                                    }
+                                    data={playlist}
+                                />
+                            );
+                    }})}
+                </div>
+            </div>: null }
+
+            {listRadio ? <div className={cx('section')}>
+                <div className={cx('section-header', 'flex justify-between')}>
+                    <h3 className={cx('section-title')}>{listRadio.title}</h3>
                     <Link to={'/radio'} className={cx('section-link')}>
                         Tất cả
                     </Link>
@@ -323,9 +176,128 @@ function Home() {
                 <div className={cx('list-slide')}>
                     <SlideRadio listRadio={listRadio} />
                 </div>
-            </div>
+            </div> : null}
 
-            <div className={cx('section')}>
+            {newMusic ? <div className={cx('section')}>
+                <h3 className={cx('section-title')}>{newMusic.title}</h3>
+                <div className={cx('list-playlist')}>
+                    {newMusic.items.map((playlist) => {
+                            return (
+                                <Playlist
+                                    key={playlist.encodeId}
+                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
+                                    name={playlist.title}
+                                    describe={playlist.sortDescription}
+                                    link='#' //mặc định
+                                    image={
+                                        playlist.thumbnail ||
+                                        playlist.thumbnailM
+                                    }
+                                    data={playlist}
+                                />
+                            );
+                    })}
+                </div>
+            </div> : null }
+
+            {weekChart ? <div className={cx('section')}>
+                <div className={cx('list-playlist')}>
+                    { weekChart.items.map((item, index) => {
+                        return (
+                            <div key={index} className={cx( 'card-wrapper','w-[33.33%] px-3.5 mb-7' )}>
+                                <div className={cx('card-banner')}>
+                                    <a className={cx('card-link')} href='#'></a>
+                                    <img src={item.cover} className={cx('card-img')}/>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div> : null }
+
+            {top100 ? <div className={cx('section')}>   
+                <div className={cx('section-header', 'flex justify-between')}>
+                    <h3 className={cx('section-title')}>{top100.title}</h3>
+                    <Link to={'/top100'} className={cx('section-link')}>
+                        Tất cả
+                    </Link>
+                </div>
+                <div className={cx('list-playlist')}>
+                    {top100.items.map((playlist, index) => {
+                        if (index < 5) {
+                            return (
+                                <Playlist
+                                    key={playlist.encodeId}
+                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
+                                    name={playlist.title}
+                                    describe={playlist.artists.map(
+                                        (artist, index) => {
+                                            return index < playlist.artists.length - 1 ? `${artist.name}, ` : `${artist.name}`;
+                                        }
+                                    )}
+                                    link='#' //mặc định
+                                    image={
+                                        playlist.thumbnail ||
+                                        playlist.thumbnailM
+                                    }
+                                    data={playlist}
+                                />
+                            );
+                    }})}
+                </div>
+            </div> : null }
+
+            
+            {XONE ? <div className={cx('section')}>
+                <h3 className={cx('section-title')}>{XONE.title}</h3>
+                <div className={cx('list-playlist')}>
+                    {XONE &&
+                        XONE.items.map((playlist) => {
+                            return (
+                                <Playlist
+                                    key={playlist.encodeId}
+                                    className='w-[25%] px-3 md:w-[20%] md:px-3.5'
+                                    name={playlist.title}
+                                    describe={playlist.sortDescription}
+                                    link='#' //mặc định
+                                    image={
+                                        playlist.thumbnail ||
+                                        playlist.thumbnailM
+                                    }
+                                    data={playlist}
+                                />
+                            );
+                        })}
+                </div>
+            </div> : null}
+
+            {/* <div className={cx('section')}>
+                <h3 className={cx('section-title')}>Nghệ sĩ yêu thích</h3>
+                <div className={cx('list-slide')}>
+                    <Slider {...propsSlide5}>
+                        {mixArtists && mixArtists.map((artist, index) => {
+                            return (
+                                <div key={index} className={cx('card-wrapper')}>
+                                    <a href='#' className={cx('artists-card')}>
+                                        <img className={cx('card-img')} src={artist.thumbnail} alt=''/>
+                                        <div className={cx('card-content')}>
+                                            <h4 className={cx('name-artists')}>{artist.artistsNames}</h4>
+                                            <div className={cx('thumbs')}> 
+                                            {artist.song.items.map( (thumb, index) => { if (index < 3) { 
+                                                return (
+                                                <div key={index} className={cx('thumb')}>         
+                                                <img className={cx('thumb-img')} src={ thumb.thumbnail} alt=''/>     
+                                                </div> )}})}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            );})}
+                    </Slider>
+                </div>
+            </div> */}
+
+            { playlistNewMusic ? <div className={cx('section')}>
                 <div className={cx('section-header', 'flex justify-between')}>
                     <h3 className={cx('section-title')}>Nhạc mới</h3>
                     <Link to={'/nhac-moi'} className={cx('section-link')}>
@@ -334,50 +306,14 @@ function Home() {
                 </div>
                 <div className={cx('list-slide')}>
                     <Slider {...propsSlide3}>
-                        {topNewMusic &&
-                            topNewMusic.map((item, index) => {
+                        {playlistNewMusic &&
+                            playlistNewMusic.map((item, index) => {
                                 return (
-                                    <div
-                                        key={item.encodeId}
-                                        className={cx('card-wrapper')}
-                                    >
+                                    <div key={item.encodeId} className={cx('card-wrapper')}>
                                         <div className={cx('card-inner')}>
-                                            <img
-                                                src={item.thumbnail}
-                                                className={cx('card-img')}
-                                            />
-                                            <div
-                                                className={cx(
-                                                    'top-music-content'
-                                                )}
-                                            >
-                                                <div
-                                                    className={cx('music-info')}
-                                                >
-                                                    <a
-                                                        href={'#'}
-                                                        title={item.title}
-                                                        className={cx('title')}
-                                                    >
-                                                        {item.title}
-                                                    </a>
-                                                    <p
-                                                        className={cx(
-                                                            'subtitle'
-                                                        )}
-                                                    >
-                                                        {item.artistsNames}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <span
-                                                        className={cx(
-                                                            'ranking'
-                                                        )}
-                                                    >
-                                                        #{index + 1}
-                                                    </span>
-                                                </div>
+                                            <img src={item.thumbnail} className={cx('card-img')}/>
+                                            <div className={cx('top-music-content' )}> 
+                                                <div className={cx('music-info')} ><a href={'#'} title={item.title}className={cx('title')}>         {item.title}     </a>     <p         className={cx(             'subtitle'         )}     >         {item.artistsNames}     </p> </div> <div>     <span         className={cx(             'ranking'         )}     >         #{index + 1}     </span> </div>
                                             </div>
                                         </div>
                                     </div>
@@ -385,12 +321,12 @@ function Home() {
                             })}
                     </Slider>
                 </div>
-            </div>
+            </div> : null }
 
             <div className={cx('section')}>
                 <Slider {...propsSlide5}>
-                    {playlistNewMusic &&
-                        playlistNewMusic.map((playlist, index) => {
+                    {topNewMusic &&
+                        topNewMusic.items.map((playlist, index) => {
                             return (
                                 <Playlist
                                     key={playlist.encodeId}
@@ -408,6 +344,7 @@ function Home() {
                         })}
                 </Slider>
             </div>
+            
         </div>
     );
 }
