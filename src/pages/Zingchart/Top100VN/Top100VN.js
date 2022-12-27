@@ -5,24 +5,23 @@ import Loading from '../Loading/Loading';
 import MusicItem from '~/components/MusicItem';
 import classNames from 'classnames/bind';
 import styles from './Top100VN.module.scss';
-
+import getHome from '~/api/getHome';
 const cx = classNames.bind(styles);
 
-const Top100VN = (props) => {
+const Top100VN = () => {
     const [music, setMusic] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await axios
-                .get(`https://apizingmp3.herokuapp.com/api/charthome`)
-                .then((res) => res.data.data);
-            setMusic(data);
+            const res = await getHome.getChart()
+            setMusic(res.data.data);
         };
         fetchData();
 
         document.title =
             '#zingchart | Xem bài hát, album, MV đang hot nhất hiện tại';
     }, []);
+    
     return (
         <div className={cx('wrapper')}>
             {music.weekChart ? (

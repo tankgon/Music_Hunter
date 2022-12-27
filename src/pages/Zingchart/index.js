@@ -2,7 +2,7 @@ import axios from 'axios';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
-
+import getHome from '~/api/getHome';
 import { Link } from 'react-router-dom';
 import { Chart } from './chart';
 import Loading from './Loading/Loading';
@@ -24,21 +24,14 @@ function Zingchart() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await axios
-                .get(`https://apizingmp3.herokuapp.com/api/charthome`)
-                .then((res) => res.data.data);
-            setMusic(data);
-            const playlist = {
-                title: "#ZingChart",
-                songs: data.RTChart.items
-            }
+            const res = await getHome.getChart()
+            setMusic(res.data.data);
+            const playlist = { songs: music.RTChart.items }
             dispatch(musicOfPage(playlist));
-            setChartInfo(data.RTChart.chart);
+            setChartInfo(music.RTChart.chart);
         };
         fetchData();
-
-        document.title =
-            '#zingchart | Xem bài hát, album, MV đang hot nhất hiện tại';
+        document.title = '#zingchart | Xem bài hát, album, MV đang hot nhất hiện tại';
     }, []);
     const handleShowMoreItems = () => {
         setVisible((prev) => prev + 90);
@@ -76,7 +69,7 @@ function Zingchart() {
                     </div>
                 )}
             </div>
-            {music.weekChart ? (
+            {music.weekChart?.vn || music.weekChart?.us || music.weekChart?.korea ? (
                 <div className={cx('top-100')}>
                     <div className={cx('blur')}></div>
                     <div className={cx('alpha')}></div>
@@ -88,17 +81,17 @@ function Zingchart() {
                         <TopMusic
                             to='/zing-chart-tuan/Bai-hat-Viet-Nam'
                             country='Việt Nam'
-                            data={music.weekChart.vn}
+                            data={music.weekChart?.vn}
                         />
                         <TopMusic
                             to='/zing-chart-tuan/bai-hat-US-UK'
                             country='US-UK'
-                            data={music.weekChart.us}
+                            data={music.weekChart?.us}
                         />
                         <TopMusic
                             to='/zing-chart-tuan/bai-hat-Kpop'
                             country='K-Pop'
-                            data={music.weekChart.korea}
+                            data={music.weekChart?.korea}
                         />
                     </div>
                 </div>

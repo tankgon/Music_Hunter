@@ -5,7 +5,7 @@ import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import Loading from '../Loading/Loading';
 import MusicItem from '~/components/MusicItem';
 import styles from './Top100KOREA.module.scss';
-
+import getHome from '~/api/getHome';
 const cx = classNames.bind(styles);
 
 const Top100KOREA = () => {
@@ -13,16 +13,15 @@ const Top100KOREA = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await axios
-                .get(`https://apizingmp3.herokuapp.com/api/charthome`)
-                .then((res) => res.data.data);
-            setMusic(data);
+            const res = await getHome.getChart()
+            setMusic(res.data.data);
         };
         fetchData();
 
         document.title =
             '#zingchart | Xem bài hát, album, MV đang hot nhất hiện tại';
     }, []);
+
     return (
         <div className={cx('wrapper')}>
             {music.weekChart ? (

@@ -9,10 +9,8 @@ import {
     Filler,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-
 import classNames from 'classnames/bind';
 import styles from './Zingchart.module.scss';
-
 const cx = classNames.bind(styles);
 
 export function Chart({ chart }) {
@@ -27,14 +25,13 @@ export function Chart({ chart }) {
 
     const chartItems = Object.values(chart.items)
 
-    const [chartData, setChartData] = useState({
-        datasets: [],
-    });
-
+    const [chartData, setChartData] = useState({ datasets: [] });
     const [chartOptions, setChartOptions] = useState({});
+
     const data1= []
     const data2= []
     const data3= []
+
     chartItems[0].map((item, index) => {
         if(index % 2 === 0 ) {
             data1.push(item.counter)
